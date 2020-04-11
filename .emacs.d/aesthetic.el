@@ -77,7 +77,7 @@
   (lambda ()
     (if (buffer-file-name)
       (current-buffer) ;; leave as-is
-      (find-file "~/Documents/org/todo.org"))))
+      (find-file "~/.org/todo.org"))))
 
 (require 'color-theme-sanityinc-tomorrow)
 (load-theme-emacs-client)
