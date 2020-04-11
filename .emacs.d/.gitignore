@@ -1,0 +1,7 @@
+# Ignore everything
+*
+
+# Except snippets and settings file
+!.gitignore
+!snippets
+!**/*.el
