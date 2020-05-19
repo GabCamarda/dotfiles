@@ -65,7 +65,7 @@
   )
 (use-package company-go
   :ensure t
-  :after (go-mode company)
+  :after (lsp-mode company)
   :config (add-to-list 'company-backends 'company-go))
 
 (use-package projectile
@@ -88,11 +88,20 @@
 (use-package lsp-mode
   :ensure t
   :init
+  :commands (lsp lsp-deferred)
+  :hook (go-mode . lsp-deferred)
+        (scala-mode . lsp-deferred)
+  :config
   (setq lsp-prefer-flymake t)
   (setq lsp-auto-guess-root nil)
   (setq lsp-java-maven-download-sources t)
   (setq lsp-java-autobuild-enabled t)
-  (setq lsp-enable-file-watchers nil))
+  ;(setq lsp-enable-file-watchers nil)
+  (setq lsp-eldoc-render-all t)
+  (lsp-register-custom-settings
+   '(("gopls.completeUnimported" t t)
+     ("gopls.staticcheck" t t)))
+  )
 (use-package lsp-ui
   :ensure t
   :init
@@ -215,9 +224,11 @@
 (load "~/.emacs.d/custom_keybindings.el")
 
 ;; ====== Programming mode setup ======
+(load "~/.emacs.d/racket_setup.el")
 (load "~/.emacs.d/c_setup.el")
 (load "~/.emacs.d/go_setup.el")
 (load "~/.emacs.d/java_setup.el")
+(load "~/.emacs.d/scala_setup.el")
 (load "~/.emacs.d/org_mode_setup.el")
 ;; ====== End programming mode setup ======
 
