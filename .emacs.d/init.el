@@ -230,6 +230,7 @@
 (load "~/.emacs.d/java_setup.el")
 (load "~/.emacs.d/scala_setup.el")
 (load "~/.emacs.d/org_mode_setup.el")
+(load "~/.emacs.d/ocaml.el")
 ;; ====== End programming mode setup ======
 
 ;; ====== Emacs custom file =========
