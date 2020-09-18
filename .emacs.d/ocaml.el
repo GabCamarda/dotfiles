@@ -8,5 +8,7 @@
 (setq utop-command "opam config exec -- utop -emacs")
 
 (add-hook 'tuareg-mode-hook (lambda ()
-  (define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
-  (add-hook 'before-save-hook #'ocamlformat-before-save)))
+			      (define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
+			      (define-key tuareg-mode-map (kbd "M-.") #'merlin-locate)
+			      (define-key tuareg-mode-map (kbd "M-,") #'merlin-pop-stack)
+			      (add-hook 'before-save-hook #'ocamlformat-before-save)))
