@@ -51,6 +51,9 @@
 ;; Allow using Ctrl for invoking M-x
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-c C-m") 'execute-extended-command)
+(global-set-key (kbd "C-w") 'backward-kill-word)
+(global-set-key (kbd "C-x C-k") 'kill-region)
+(global-set-key (kbd "C-c C-k") 'kill-region)
 
 (global-set-key (kbd "M-p") 'beginning-of-defun)
 (global-set-key (kbd "M-n") 'end-of-defun)

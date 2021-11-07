@@ -64,10 +64,10 @@
 ;(add-hook 'after-init-hook #'global-flycheck-mode) ; As-you-type error highlighting
 
 ;; Also works for Java.
-(autoload 'google-set-c-style "google-c-style")
-(autoload 'google-make-newline-indent "google-c-style")
-(add-hook 'c-mode-common-hook 'google-set-c-style)
-(add-hook 'c-mode-common-hook 'google-make-newline-indent)
+;; (autoload 'google-set-c-style "google-c-style")
+;; (autoload 'google-make-newline-indent "google-c-style")
+;; (add-hook 'c-mode-common-hook 'google-set-c-style)
+;; (add-hook 'c-mode-common-hook 'google-make-newline-indent)
 
 ;; helpers
 (electric-pair-mode 1)      	   ; Auto insert closing bracket
@@ -85,5 +85,11 @@
 (defun remove-duplicates (n)
   "Helper function for counsel-dash backwards compatible remove-duplicates N."
   (cl-remove-duplicates n))
+
+(defun new-shell ()
+  "creates a shell with a given name (using eshell)"
+  (interactive);; "Prompt\n shell name:")
+  (let ((shell-name (read-string "shell name: " nil)))
+    (eshell (concat "*" shell-name "*"))))
 
 ;;; custom_settings.el ends here

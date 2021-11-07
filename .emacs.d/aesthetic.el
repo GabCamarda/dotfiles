@@ -41,7 +41,6 @@
 (setq visible-bell nil)             			; Disable annoying visual bell graphic
 (setq ring-bell-function 'ignore)   			; Disable super annoying audio bell
 (setq fill-column 80)                                   ; M-q should fill at 80 chars, not 75
-(set-face-attribute 'flycheck-error nil :underline '(:color "red2" :style wave))
 
 ;; note, if the fonts are weird, run `M-x all-the-icons-install-fonts`
 (use-package doom-modeline

@@ -14,7 +14,7 @@
  '(company-dabbrev-ignore-case nil)
  '(company-idle-delay 0.1)
  '(company-minimum-prefix-length 2)
- '(company-show-numbers nil)
+ '(company-show-quick-access nil)
  '(company-tooltip-align-annotations t)
  '(custom-enabled-themes '(sanityinc-tomorrow-night))
  '(custom-safe-themes

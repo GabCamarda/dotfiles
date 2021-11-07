@@ -16,6 +16,7 @@
   (require 'use-package))
 
 (use-package auto-package-update
+  :ensure t
   :config
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t)
@@ -56,16 +57,8 @@
   ;; disables TAB in company-mode, freeing it for yasnippet
   (define-key company-active-map [tab] nil)
   (define-key company-active-map (kbd "TAB") nil))
-(use-package company-lsp
-  :ensure t
-  :after (lsp-mode company)
-  :config
-  (add-to-list 'company-backends 'company-lsp)
-  (setq company-lsp-cache-candidates t)
-  )
 (use-package company-go
   :ensure t
-  :after (lsp-mode company)
   :config (add-to-list 'company-backends 'company-go))
 
 (use-package projectile
@@ -85,45 +78,20 @@
   (setq projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".settings" ".idea"))
   (projectile-mode))
 
-(use-package lsp-mode
+;; LSP client with a minimally-intrusive approach
+(use-package eglot
   :ensure t
-  :init
-  :commands (lsp lsp-deferred)
-  :hook (go-mode . lsp-deferred)
-        (scala-mode . lsp-deferred)
+  :defer t
+  :bind
+  (("C-c r" . 'eglot-rename)
+   ("C-c o" . 'eglot-code-action-organize-imports)
+   ("C-c h" . 'eldoc))
   :config
-  (setq lsp-prefer-flymake t)
-  (setq lsp-auto-guess-root nil)
-  (setq lsp-java-maven-download-sources t)
-  (setq lsp-java-autobuild-enabled t)
-  ;(setq lsp-enable-file-watchers nil)
-  (setq lsp-eldoc-render-all t)
-  (lsp-register-custom-settings
-   '(("gopls.completeUnimported" t t)
-     ("gopls.staticcheck" t t)))
+  (setq-default eglot-workspace-configuration
+		'((:gopls .
+			  ((staticcheck . t)
+			   (matcher . "CaseSensitive")))))
   )
-(use-package lsp-ui
-  :ensure t
-  :init
-  :config
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (setq lsp-ui-sideline-enable nil
-	lsp-ui-doc-enable nil
-	lsp-ui-flycheck-enable t
-        lsp-ui-sideline-show-flycheck t
-	lsp-ui-imenu-enable t
-	lsp-ui-sideline-show-code-actions nil
-	;lsp-ui-sideline-show-hover nil
-	lsp-ui-sideline-show-symbol nil
-	lsp-ui-sideline-ignore-duplicate t))
-
-(use-package dap-mode
-  :ensure t :after lsp-mode
-  :config
-  (require 'dap-java)
-  (dap-mode t)
-  (dap-ui-mode t))
 
 (use-package ivy
   :ensure t
@@ -227,13 +195,23 @@
 (load "~/.emacs.d/racket_setup.el")
 (load "~/.emacs.d/c_setup.el")
 (load "~/.emacs.d/go_setup.el")
-(load "~/.emacs.d/java_setup.el")
 (load "~/.emacs.d/scala_setup.el")
 (load "~/.emacs.d/org_mode_setup.el")
-(load "~/.emacs.d/ocaml.el")
+(load "~/.emacs.d/ocaml_setup.el")
+(load "~/.emacs.d/elixir_setup.el")
+(load "~/.emacs.d/js_setup.el")
+(load "~/.emacs.d/python_setup.el")
 ;; ====== End programming mode setup ======
+
+;; ====== Custom Settings =====
+(load "~/.emacs.d/erc.el")
+(load "~/.emacs.d/calendar.el")
+;; ====== End Custom Settings =====
 
 ;; ====== Emacs custom file =========
 (setq custom-file "~/.emacs.d/editor_custom_file.el")
 (load custom-file)
 ;; ====== End Emacs custom file =====
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line

@@ -3,7 +3,7 @@
 
 (require 'nnir)
 ;; @see http://www.emacswiki.org/emacs/GnusGmail#toc1
-(setq gnus-select-method '(nntp "news.gmane.org")) ;; if you read news groups
+;; (setq gnus-select-method '(nntp "news.gmane.org")) ;; if you read news groups
 ;; ask encryption password once
 (setq epa-file-cache-passphrase-for-symmetric-encryption t)
 

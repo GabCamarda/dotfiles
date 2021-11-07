@@ -1,16 +1,31 @@
 ;;; go_setup.el --- Setup emacs to use Go
 
-;; Set up before-save hooks to format buffer and add/delete imports.
-;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
-  (setq company-backends '(company-go))           ; set autocompletion with company-mode
+(defun eglot-format-buffer-on-save ()
+  (if (string-match "command not found"
+		    (with-temp-buffer (shell-command "gopls" t)
+				      (buffer-string)))
+      (message "gopls not found. Installing latest version for LSP.")
+      (shell-command "go get golang.org/x/tools/gopls@latest" t))   ; download gopls package if not found
+
   (if (not (string-match "go" compile-command))   ; set compile command default
       (set (make-local-variable 'compile-command)
            "go build -v && go test -v -cover && go vet"))
 
   (local-set-key (kbd "C-c C-c c") 'compile)	  ; Invoke compiler
   (local-set-key (kbd "C-c C-c r") 'recompile)    ; Redo most recent compile cmd
+  (add-hook 'before-save-hook #'eglot-format-buffer -10 t))
 
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+(defun project-find-go-module (dir)
+  (when-let ((root (locate-dominating-file dir "go.mod")))
+    (cons 'go-module root)))
+
+(cl-defmethod project-root ((project (head go-module)))
+  (cdr project))
+
+(setq-default eglot-workspace-configuration
+              '((:gopls . (:usePlaceholders t))))
+
+(add-hook 'project-find-functions #'project-find-go-module)
+(add-hook 'go-mode-hook #'yas-minor-mode)
+(add-hook 'go-mode-hook #'eglot-ensure)
+(add-hook 'go-mode-hook #'eglot-format-buffer-on-save)
