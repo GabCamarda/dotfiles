@@ -22,9 +22,9 @@
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe))
 
-(use-package use-package-ensure-system-package)
+(use-package use-package-ensure-system-package :ensure t)
 ;; Pull exec-path out of current shell settings, useful for setting the right paths when testing
-(use-package exec-path-from-shell)
+(use-package exec-path-from-shell :ensure t)
 (exec-path-from-shell-initialize)
 
 ;; 3rd party
