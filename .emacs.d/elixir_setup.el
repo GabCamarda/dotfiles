@@ -1,6 +1,7 @@
 (require 'eglot)
 (use-package elixir-mode :ensure t)
 (use-package flycheck-credo :ensure t)
+(use-package exunit :ensure t)
 
 (eval-after-load 'flycheck
   '(flycheck-credo-setup))
@@ -11,6 +12,7 @@
    (subword-mode)
    (eglot-ensure)
    (flycheck-mode)
+   (exunit-mode)
    (add-hook 'before-save-hook 'eglot-format nil t)))
 
 ;; Make sure to edit the path appropriately, use the .bat script instead for Windows
