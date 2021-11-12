@@ -70,6 +70,7 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c b") 'org-switchb)
 (global-set-key (kbd "C-x p e") 'my/project-eshell)
+(global-set-key (kbd "C-x p s") 'my/project-shell)
 
 ;; allow switching windows easier
 (global-set-key (kbd "M-0") 'other-window)
@@ -81,6 +82,13 @@
 (defun my/project-eshell ()
   (interactive)
   (let ((buf (project-eshell)))
+	(switch-to-buffer (other-buffer buf))
+	(switch-to-buffer-other-window buf)
+	))
+
+(defun my/project-shell ()
+  (interactive)
+  (let ((buf (project-shell)))
 	(switch-to-buffer (other-buffer buf))
 	(switch-to-buffer-other-window buf)
   ))
