@@ -103,6 +103,19 @@
   (setq ivy-initial-inputs-alist nil)
   )
 
+;; Enrich buffers
+(use-package ivy-rich
+  :ensure t
+  :after ivy
+  :init (ivy-rich-mode 1)
+  :custom
+  (ivy-virtual-abbreviate 'full
+                          ivy-rich-switch-buffer-align-virtual-buffer t
+                          ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich--ivy-switch-buffer-transformer))
+
 (use-package smartparens
   :diminish smartparens-mode
   :commands

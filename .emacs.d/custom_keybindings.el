@@ -13,16 +13,15 @@
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; File finding
-(global-set-key (kbd "C-s") 'swiper)
+(global-set-key (kbd "C-s") 'isearch-forward)
+(global-set-key (kbd "C-c s") 'swiper)
+(global-set-key (kbd "C-c C-s a") 'swiper-all)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-x C-p") 'find-or-create-file-at-point)
-(global-set-key (kbd "C-x M-p") 'find-or-create-file-at-point-other-window)
 (global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c n d") 'find-name-dired)
-(global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
 
 ;; get rid of `find-file-read-only' and replace it with something
 ;; more useful
@@ -49,8 +48,8 @@
 (global-set-key (kbd "<M-return>") 'new-line-dwim)
 
 ;; Allow using Ctrl for invoking M-x
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
-(global-set-key (kbd "C-c C-m") 'execute-extended-command)
+(global-set-key (kbd "C-x C-m") 'counsel-M-x)
+(global-set-key (kbd "C-c C-m") 'counsel-M-x)
 (global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-x C-k") 'kill-region)
 (global-set-key (kbd "C-c C-k") 'kill-region)
@@ -70,6 +69,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c b") 'org-switchb)
+(global-set-key (kbd "C-x p e") 'my/project-eshell)
 
 ;; allow switching windows easier
 (global-set-key (kbd "M-0") 'other-window)
@@ -77,6 +77,13 @@
 (defun prev-window ()
   (interactive)
   (other-window -1))
+
+(defun my/project-eshell ()
+  (interactive)
+  (let ((buf (project-eshell)))
+	(switch-to-buffer (other-buffer buf))
+	(switch-to-buffer-other-window buf)
+  ))
 
 (defun duplicate-line-or-region (&optional n)
   "Duplicate current line, or region if active.
