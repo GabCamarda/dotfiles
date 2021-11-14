@@ -38,6 +38,7 @@
 (use-package magit :ensure t :defer t)
 (use-package flycheck :ensure t :defer t)
 (use-package yasnippet :ensure t :defer t)
+(use-package yasnippet-snippets :ensure t :defer t)
 (use-package hydra :ensure t :defer t)
 (use-package counsel-dash :ensure t :defer t)
 (use-package company
