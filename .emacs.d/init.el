@@ -1,6 +1,7 @@
 ;; Set up package repositories so M-x package-install works.
 (require 'package)
 (setq package-enable-at-startup nil)
+(setq comp-deferred-compilation t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
@@ -77,6 +78,7 @@
   (setq projectile-globally-ignored-directories
         '(".git" "node_modules" "__pycache__" ".vs"))
   (setq projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".settings" ".idea"))
+  (setq projectile-switch-project-action 'projectile-vc)
   (projectile-mode))
 
 ;; LSP client with a minimally-intrusive approach
@@ -161,6 +163,10 @@
              ("a" . sx-ask)
              ("s" . sx-search)))
 
+;; Hacker News client
+(use-package hackernews
+  :ensure t)
+
 ;; Fix trailing spaces but only in modified lines
 (use-package ws-butler
   :ensure t
@@ -168,6 +174,7 @@
   (add-hook 'prog-mode-hook #'ws-butler-mode))
 
 (use-package hideshow
+  :ensure t
   :bind (("C-c TAB" . hs-toggle-hiding)
          ("C-\\" . hs-toggle-hiding)
          ("M-+" . hs-show-all))
@@ -184,6 +191,7 @@
                   (javascript-mode  "{" "}" "/[*/]" nil)))))
 
 (use-package dumb-jump
+  :ensure t
   :bind (("C-c C-g o" . dumb-jump-go-other-window)
          ("C-c C-g j" . dumb-jump-go)
          ("C-c C-g i" . dumb-jump-go-prompt)
@@ -199,10 +207,8 @@
 
 ;; Custom settings
 (load "~/.emacs.d/custom_settings.el")
-
 ;; High level aesthetic stuff
 (load "~/.emacs.d/aesthetic.el")
-
 ;; Make keyboard bindings not suck
 (load "~/.emacs.d/custom_keybindings.el")
 
@@ -227,6 +233,3 @@
 (setq custom-file "~/.emacs.d/editor_custom_file.el")
 (load custom-file)
 ;; ====== End Emacs custom file =====
-;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-;; ## end of OPAM user-setup addition for emacs / base ## keep this line
