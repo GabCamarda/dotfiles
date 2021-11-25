@@ -17,6 +17,7 @@
 (global-set-key (kbd "C-c s") 'swiper)
 (global-set-key (kbd "C-c C-s a") 'swiper-all)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-c C-f") 'counsel-ag)
 (global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
