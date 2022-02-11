@@ -13,7 +13,7 @@
    (eglot-ensure)
    (flycheck-mode)
    (exunit-mode)
-   (add-hook 'before-save-hook 'eglot-format nil t)))
+   ))
 
 ;; Make sure to edit the path appropriately, use the .bat script instead for Windows
 (add-to-list 'eglot-server-programs '(elixir-mode "~/.emacs.d/elixir-ls/language_server.sh"))

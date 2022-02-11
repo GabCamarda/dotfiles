@@ -7,10 +7,13 @@
 (use-package swiper :ensure t)
 (use-package counsel :ensure t)
 
-;; Jump to a definition in the current file. (This is awesome)
+;; Use improved M-x
 (global-set-key (kbd "M-x") 'counsel-M-x)
 ;; rebind default old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;; annoyances with UK keyboard layout
+(define-key key-translation-map (kbd "M-3") (kbd "#"))
 
 ;; File finding
 (global-set-key (kbd "C-s") 'isearch-forward)
@@ -76,6 +79,11 @@
 ;; allow switching windows easier
 (global-set-key (kbd "M-0") 'other-window)
 (global-set-key (kbd "M-9") 'prev-window)
+
+;; Programming specific bindings
+(define-key prog-mode-map (kbd "C-c f n e") 'flymake-goto-next-error)
+(define-key prog-mode-map (kbd "C-c f p e") 'flymake-goto-prev-error)
+
 (defun prev-window ()
   (interactive)
   (other-window -1))

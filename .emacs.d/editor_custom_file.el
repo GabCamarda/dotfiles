@@ -36,7 +36,7 @@
 		  ((org-agenda-overriding-header "Urgent things to do"))))
       nil nil)))
  '(package-selected-packages
-   '(posframe php-mode yasnippet-snippets ws-butler wgrep use-package treepy sx sr-speedbar popup-imenu org-link-minor-mode neotree moe-theme magit lsp-ui lsp-java graphql google-c-style go-guru go-fill-struct go-errcheck go-eldoc go-autocomplete go-add-tags flycheck-gometalinter eglot dumb-jump dap-mode counsel-projectile counsel-dash company-lsp company-go color-theme-sanityinc-tomorrow change-inner autodisass-java-bytecode))
+   '(jest string-inflection posframe php-mode yasnippet-snippets ws-butler wgrep use-package treepy sx sr-speedbar popup-imenu org-link-minor-mode neotree moe-theme magit lsp-ui lsp-java graphql google-c-style go-guru go-fill-struct go-errcheck go-eldoc go-autocomplete go-add-tags flycheck-gometalinter eglot dumb-jump dap-mode counsel-projectile counsel-dash company-lsp company-go color-theme-sanityinc-tomorrow change-inner autodisass-java-bytecode))
  '(send-mail-function 'smtpmail-send-it)
  '(show-paren-mode t)
  '(show-paren-style 'expression)

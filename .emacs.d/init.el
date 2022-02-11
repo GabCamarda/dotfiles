@@ -51,8 +51,8 @@
   (company-minimum-prefix-length 2)
   (company-show-numbers nil)
   (company-tooltip-align-annotations 't)
-  (company-dabbrev-ignore-case nil)
-  (company-dabbrev-code-ignore-case nil)
+  (company-dabbrev-ignore-case t)
+  (company-dabbrev-code-ignore-case t)
   (company-dabbrev-downcase nil)
   (global-company-mode t)
   :config
@@ -76,7 +76,7 @@
   (setq projectile-globally-ignored-file-suffixes
         '("#" "~" ".swp" ".o" ".so" ".exe" ".dll" ".elc" ".pyc" ".jar" "*.class"))
   (setq projectile-globally-ignored-directories
-        '(".git" "node_modules" "__pycache__" ".vs"))
+        '(".git" "node_modules" "__pycache__" ".vs" "_build"))
   (setq projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".settings" ".idea"))
   (setq projectile-switch-project-action 'projectile-vc)
   (projectile-mode))
@@ -90,6 +90,7 @@
    ("C-c o" . 'eglot-code-action-organize-imports)
    ("C-c h" . 'eldoc))
   :config
+  (setq eglot-extend-to-xref t)
   (setq-default eglot-workspace-configuration
 		'((:gopls .
 			  ((staticcheck . t)
@@ -198,12 +199,17 @@
          ("C-c C-g x" . dumb-jump-go-prefer-external)
          ("C-c C-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'ivy)
-  :ensure)
+  )
 
 ;; Global hooks
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'xref-backend-definitions #'dumb-jump-xref-activate)
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+(add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
+;; (add-hook 'eglot-xref-backend #'dumb-jump-xref-activate)
+(setq xref-backend-functions (remq 'etags--xref-backend xref-backend-functions))
+(setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+(setq desktop-path '("~/.emacs.d/" "~" "."))
 
 ;; Custom settings
 (load "~/.emacs.d/custom_settings.el")
