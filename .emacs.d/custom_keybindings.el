@@ -1,42 +1,42 @@
 ;;; custom_keybinding.el --- Provides useful custom keybindings
 
-(require 'use-package)
-(use-package change-inner :ensure t)     ; Similar to ci or co in Vim
-(use-package ibuffer :ensure t)
-(use-package recentf :init)
-(use-package swiper :ensure t)
-(use-package counsel :ensure t)
+;; (require 'use-package)
+;; (use-package change-inner :ensure t)     ; Similar to ci or co in Vim
+;; (use-package ibuffer :ensure t)
+;; (use-package recentf :init)
+;; (use-package swiper :ensure t)
+;; (use-package counsel :ensure t)
 
 ;; Use improved M-x
-(global-set-key (kbd "M-x") 'counsel-M-x)
-;; rebind default old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;; (global-set-key (kbd "M-x") 'counsel-M-x)
+;; ;; rebind default old M-x.
+;; (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; annoyances with UK keyboard layout
 (define-key key-translation-map (kbd "M-3") (kbd "#"))
 
 ;; File finding
-(global-set-key (kbd "C-s") 'isearch-forward)
-(global-set-key (kbd "C-c s") 'swiper)
-(global-set-key (kbd "C-c C-s a") 'swiper-all)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-c C-f") 'counsel-ag)
-(global-set-key (kbd "C-c y") 'bury-buffer)
-(global-set-key (kbd "C-c r") 'revert-buffer)
-(global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-c n d") 'find-name-dired)
+;; (global-set-key (kbd "C-s") 'isearch-forward)
+;; (global-set-key (kbd "C-c s") 'swiper)
+;; (global-set-key (kbd "C-c C-s a") 'swiper-all)
+;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;; (global-set-key (kbd "C-c C-f") 'counsel-ag)
+;; (global-set-key (kbd "C-c y") 'bury-buffer)
+;; (global-set-key (kbd "C-c r") 'revert-buffer)
+;; (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
+;; (global-set-key (kbd "C-x C-b") 'ibuffer)
+;; (global-set-key (kbd "C-c n d") 'find-name-dired)
 
 ;; get rid of `find-file-read-only' and replace it with something
 ;; more useful
-(recentf-mode t)
-(setq recentf-max-saved-items 50)
-(global-set-key (kbd "C-x C-r") 'counsel-recentf)
+;; (recentf-mode t)
+;; (setq recentf-max-saved-items 50)
+;; (global-set-key (kbd "C-x C-r") 'counsel-recentf)
 
 ;; Completion at point
 (global-set-key (kbd "C-<tab>") 'completion-at-point)
 ;; Tell Ivy to not autocomplete
-(define-key minibuffer-local-map (kbd "M-RET") 'ivy-immediate-done)
+;; (define-key minibuffer-local-map (kbd "M-RET") 'ivy-immediate-done)
 
 ;; Webjump let's you quickly search google, wikipedia, emacs wiki
 (global-set-key (kbd "C-x w j") 'webjump)
@@ -52,21 +52,21 @@
 (global-set-key (kbd "<M-return>") 'new-line-dwim)
 
 ;; Allow using Ctrl for invoking M-x
-(global-set-key (kbd "C-x C-m") 'counsel-M-x)
-(global-set-key (kbd "C-c C-m") 'counsel-M-x)
-(global-set-key (kbd "C-w") 'backward-kill-word)
-(global-set-key (kbd "C-x C-k") 'kill-region)
-(global-set-key (kbd "C-c C-k") 'kill-region)
+;; (global-set-key (kbd "C-x C-m") 'counsel-M-x)
+;; (global-set-key (kbd "C-c C-m") 'counsel-M-x)
+;; (global-set-key (kbd "C-w") 'backward-kill-word)
+;; (global-set-key (kbd "C-x C-k") 'kill-region)
+;; (global-set-key (kbd "C-c C-k") 'kill-region)
 
 (global-set-key (kbd "M-p") 'beginning-of-defun)
 (global-set-key (kbd "M-n") 'end-of-defun)
-(global-set-key (kbd "M-i") 'change-inner)
-(global-set-key (kbd "M-o") 'change-outer)
-(global-set-key (kbd "s-i") 'copy-inner)
-(global-set-key (kbd "s-o") 'copy-outer)
-(global-set-key [f5] 'call-last-kbd-macro)
-(global-set-key (kbd "C-<backspace>") 'contextual-backspace)
-(global-set-key (kbd "C-x C-n") #'eos/narrow-or-widen-dwim)
+;; (global-set-key (kbd "M-i") 'change-inner)
+;; (global-set-key (kbd "M-o") 'change-outer)
+;; (global-set-key (kbd "s-i") 'copy-inner)
+;; (global-set-key (kbd "s-o") 'copy-outer)
+;; (global-set-key [f5] 'call-last-kbd-macro)
+;; (global-set-key (kbd "C-<backspace>") 'contextual-backspace)
+;; (global-set-key (kbd "C-x C-n") #'eos/narrow-or-widen-dwim)
 
 ;; Org-mode, the following lines are always needed.
 (global-set-key (kbd "C-c l") 'org-store-link)

@@ -23,63 +23,91 @@
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe))
 
-(use-package use-package-ensure-system-package :ensure t)
 ;; Pull exec-path out of current shell settings, useful for setting the right paths when testing
 (use-package exec-path-from-shell :ensure t)
 (exec-path-from-shell-initialize)
 
-;; 3rd party
-(add-to-list 'load-path "~/.emacs.d/packages")
-(add-to-list 'load-path "~/.emacs.d/snippets")
-(use-package epa-file)		   		   ; gpg stuff, built-in
-
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
-(use-package magit :ensure t :defer t)
-(use-package flycheck :ensure t :defer t)
-(use-package yasnippet :ensure t :defer t)
-(use-package yasnippet-snippets :ensure t :defer t)
-(use-package hydra :ensure t :defer t)
-(use-package counsel-dash :ensure t :defer t)
-(use-package company
-  :defer 2
-  :diminish
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .1)
-  (company-minimum-prefix-length 2)
-  (company-show-numbers nil)
-  (company-tooltip-align-annotations 't)
-  (company-dabbrev-ignore-case t)
-  (company-dabbrev-code-ignore-case t)
-  (company-dabbrev-downcase nil)
-  (global-company-mode t)
+;; Built-in
+(use-package epa-file :init)		   		   ; gpg stuff
+(use-package ido                                           ; ido
+  :init
   :config
-  ;; disables TAB in company-mode, freeing it for yasnippet
-  (define-key company-active-map [tab] nil)
-  (define-key company-active-map (kbd "TAB") nil))
-(use-package company-go
+  (setq ido-enable-flex-matching t)
+  (ido-mode 1)
+  (ido-everywhere 1)
+  )
+
+(use-package ido-completing-read+
   :ensure t
-  :config (add-to-list 'company-backends 'company-go))
-
-(use-package projectile
-  :ensure
   :config
-  (use-package counsel-projectile
-    :ensure t
-    :config
-    (counsel-projectile-mode))
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-enable-caching t)
-  (setq projectile-indexing-method 'alien)
-  (setq projectile-globally-ignored-file-suffixes
-        '("#" "~" ".swp" ".o" ".so" ".exe" ".dll" ".elc" ".pyc" ".jar" "*.class"))
-  (setq projectile-globally-ignored-directories
-        '(".git" "node_modules" "__pycache__" ".vs" "_build"))
-  (setq projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".settings" ".idea"))
-  (setq projectile-switch-project-action 'projectile-vc)
-  (projectile-mode))
+  (ido-ubiquitous-mode 1)
+  )
+
+(use-package corfu
+  ;; Optional customizations
+  ;; :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+  :ensure t
+  :config
+  ;; Enable auto completion and configure quitting
+  (setq corfu-auto t
+	corfu-quit-no-match 'separator) ;; or t
+  :init
+  (global-corfu-mode))
+
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; TAB cycle if there are only few candidates
+  (setq completion-cycle-threshold 3)
+
+  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete))
+
+(require 'grep)
+ (grep-apply-setting
+   'grep-find-command
+   '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27)
+ )
+
+(use-package ctags-update :ensure t)
+;; (use-package projectile
+;;   :ensure
+;;   :config
+;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;;   (setq projectile-enable-caching t)
+;;   (setq projectile-indexing-method 'alien)
+;;   (setq projectile-globally-ignored-file-suffixes
+;;         '("#" "~" ".swp" ".o" ".so" ".exe" ".dll" ".elc" ".pyc" ".jar" "*.class"))
+;;   (setq projectile-globally-ignored-directories
+;;         '(".git" "node_modules" "__pycache__" ".vs" "_build"))
+;;   (setq projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store" ".settings" ".idea"))
+;;   (setq projectile-switch-project-action 'projectile-vc)
+;;   (projectile-mode))
 
 ;; LSP client with a minimally-intrusive approach
 (use-package eglot
@@ -89,80 +117,7 @@
   (("C-c r" . 'eglot-rename)
    ("C-c o" . 'eglot-code-action-organize-imports)
    ("C-c h" . 'eldoc))
-  :config
-  (setq eglot-extend-to-xref t)
-  (setq-default eglot-workspace-configuration
-		'((:gopls .
-			  ((staticcheck . t)
-			   (matcher . "CaseSensitive")))))
   )
-
-(use-package ivy
-  :ensure t
-  :diminish (ivy-mode . "")
-  :init (ivy-mode 1) ; globally at startup
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "%d/%d ")
-  (setq ivy-initial-inputs-alist nil)
-  )
-
-;; Enrich buffers
-(use-package ivy-rich
-  :ensure t
-  :after ivy
-  :init (ivy-rich-mode 1)
-  :custom
-  (ivy-virtual-abbreviate 'full
-                          ivy-rich-switch-buffer-align-virtual-buffer t
-                          ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich--ivy-switch-buffer-transformer))
-
-(use-package smartparens
-  :diminish smartparens-mode
-  :commands
-  smartparens-strict-mode
-  smartparens-mode
-  sp-restrict-to-pairs-interactive
-  sp-local-pair
-  :init
-  (setq sp-interactive-dwim t)
-  :config
-  (require 'smartparens-config)
-  (sp-use-smartparens-bindings)
-
-  (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
-  (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
-  (sp-pair "{" "}" :wrap "C-{")
-
-  ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
-  (bind-key "C-<left>" nil smartparens-mode-map)
-  (bind-key "C-<right>" nil smartparens-mode-map)
-
-  (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
-  (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map))
-
-;; Visual summary of current file
-(use-package popup-imenu
-  :ensure t
-  :bind ("C-x C-i" . popup-imenu))
-
-;; Stack overflow client
-(use-package sx
-  :ensure t
-  :init
-  :config
-  (bind-keys :prefix "C-c C-s s"
-             :prefix-map my-sx-map
-             :prefix-docstring "Global keymap for SX."
-             ("q" . sx-tab-all-questions)
-             ("i" . sx-inbox)
-             ("o" . sx-open-link)
-             ("u" . sx-tab-unanswered-my-tags)
-             ("a" . sx-ask)
-             ("s" . sx-search)))
 
 ;; Hacker News client
 (use-package hackernews
@@ -174,23 +129,6 @@
   :init
   (add-hook 'prog-mode-hook #'ws-butler-mode))
 
-(use-package hideshow
-  :ensure t
-  :bind (("C-c TAB" . hs-toggle-hiding)
-         ("C-\\" . hs-toggle-hiding)
-         ("M-+" . hs-show-all))
-  :init (add-hook #'prog-mode-hook #'hs-minor-mode)
-  :diminish hs-minor-mode
-  :config
-  (setq hs-special-modes-alist
-        (mapcar 'purecopy
-                '((c-mode "{" "}" "/[*/]" nil nil)
-                  (c++-mode "{" "}" "/[*/]" nil nil)
-                  (java-mode "{" "}" "/[*/]" nil nil)
-                  (js-mode "{" "}" "/[*/]" nil)
-                  (json-mode "{" "}" "/[*/]" nil)
-                  (javascript-mode  "{" "}" "/[*/]" nil)))))
-
 (use-package dumb-jump
   :ensure t
   :bind (("C-c C-g o" . dumb-jump-go-other-window)
@@ -198,41 +136,24 @@
          ("C-c C-g i" . dumb-jump-go-prompt)
          ("C-c C-g x" . dumb-jump-go-prefer-external)
          ("C-c C-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy)
+  :config (setq dumb-jump-selector 'ag)
   )
 
 ;; Global hooks
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-(add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
-;; (add-hook 'eglot-xref-backend #'dumb-jump-xref-activate)
-(setq xref-backend-functions (remq 'etags--xref-backend xref-backend-functions))
-(setq xref-show-definitions-function #'xref-show-definitions-completing-read)
-(setq desktop-path '("~/.emacs.d/" "~" "."))
-
-;; Custom settings
-(load "~/.emacs.d/custom_settings.el")
-;; High level aesthetic stuff
-(load "~/.emacs.d/aesthetic.el")
-;; Make keyboard bindings not suck
-(load "~/.emacs.d/custom_keybindings.el")
 
 ;; ====== Programming mode setup ======
-(load "~/.emacs.d/racket_setup.el")
-(load "~/.emacs.d/c_setup.el")
-(load "~/.emacs.d/go_setup.el")
-(load "~/.emacs.d/scala_setup.el")
-(load "~/.emacs.d/org_mode_setup.el")
-(load "~/.emacs.d/ocaml_setup.el")
-(load "~/.emacs.d/elixir_setup.el")
-(load "~/.emacs.d/js_setup.el")
-(load "~/.emacs.d/python_setup.el")
+(load "~/.emacs.d/programming/ocaml_setup.el")
+(load "~/.emacs.d/programming/elixir_setup.el")
+;; (load "~/.emacs.d/programming/js_setup.el")
 ;; ====== End programming mode setup ======
 
 ;; ====== Custom Settings =====
+(load "~/.emacs.d/custom_settings.el")
+(load "~/.emacs.d/custom_keybindings.el")
+(load "~/.emacs.d/aesthetic.el")
+(load "~/.emacs.d/org_mode_setup.el")
 (load "~/.emacs.d/erc.el")
-(load "~/.emacs.d/calendar.el")
 ;; ====== End Custom Settings =====
 
 ;; ====== Emacs custom file =========

@@ -43,9 +43,9 @@
 (setq fill-column 80)                                   ; M-q should fill at 80 chars, not 75
 
 ;; note, if the fonts are weird, run `M-x all-the-icons-install-fonts`
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :init (doom-modeline-mode 1))
 
 ;; colorize the output of the compilation mode.
 (require 'ansi-color)
