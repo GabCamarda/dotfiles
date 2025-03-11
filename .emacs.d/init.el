@@ -23,7 +23,7 @@
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe))
 
-(use-package use-package-ensure-system-package :ensure t)
+;; (use-package use-package-ensure-system-package :ensure t)
 ;; Pull exec-path out of current shell settings, useful for setting the right paths when testing
 (use-package exec-path-from-shell :ensure t)
 (exec-path-from-shell-initialize)
@@ -37,11 +37,11 @@
 (setq use-package-always-ensure t)
 
 (use-package magit :ensure t :defer t)
-(use-package flycheck :ensure t :defer t)
+;; (use-package flycheck :ensure t :defer t)
 (use-package yasnippet :ensure t :defer t)
 (use-package yasnippet-snippets :ensure t :defer t)
-(use-package hydra :ensure t :defer t)
-(use-package counsel-dash :ensure t :defer t)
+;; (use-package hydra :ensure t :defer t)
+;; (use-package counsel-dash :ensure t :defer t)
 (use-package company
   :defer 2
   :diminish
@@ -149,21 +149,6 @@
   :ensure t
   :bind ("C-x C-i" . popup-imenu))
 
-;; Stack overflow client
-(use-package sx
-  :ensure t
-  :init
-  :config
-  (bind-keys :prefix "C-c C-s s"
-             :prefix-map my-sx-map
-             :prefix-docstring "Global keymap for SX."
-             ("q" . sx-tab-all-questions)
-             ("i" . sx-inbox)
-             ("o" . sx-open-link)
-             ("u" . sx-tab-unanswered-my-tags)
-             ("a" . sx-ask)
-             ("s" . sx-search)))
-
 ;; Hacker News client
 (use-package hackernews
   :ensure t)
@@ -201,13 +186,19 @@
   :config (setq dumb-jump-selector 'ivy)
   )
 
+(use-package devdocs
+  :ensure t
+  :bind (("C-h D" . 'devdocs-lookup))
+  )
+
 ;; Global hooks
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-(add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
+;; (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+;; (add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
+(add-to-list 'xref-backend-functions #'etags--xref-backend t)
 ;; (add-hook 'eglot-xref-backend #'dumb-jump-xref-activate)
-(setq xref-backend-functions (remq 'etags--xref-backend xref-backend-functions))
+;; (setq xref-backend-functions (remq 'etags--xref-backend xref-backend-functions))
 (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
 (setq desktop-path '("~/.emacs.d/" "~" "."))
 
@@ -227,7 +218,6 @@
 (load "~/.emacs.d/ocaml_setup.el")
 (load "~/.emacs.d/elixir_setup.el")
 (load "~/.emacs.d/js_setup.el")
-(load "~/.emacs.d/python_setup.el")
 ;; ====== End programming mode setup ======
 
 ;; ====== Custom Settings =====
