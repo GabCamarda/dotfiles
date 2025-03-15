@@ -2,7 +2,6 @@
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 (use-package ocamlformat :ensure t)
-
 (use-package utop :ensure t)
 ;; Use the opam installed utop
 (setq utop-command "opam config exec -- utop -emacs")
