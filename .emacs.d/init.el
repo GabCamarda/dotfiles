@@ -13,23 +13,22 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(setq use-package-always-ensure t)
-(setq org-agenda-files '("~/Documents/org/"))
 (setq desktop-path '("~/.emacs.d/" "~" "."))
 (fido-mode t)
 (fido-vertical-mode t)
 
 ;; Packages
-(use-package epa-file)		   	   ; gpg stuff, built-in
-(use-package ag :ensure t)
 (use-package simplicity-theme :ensure t)
-(use-package deadgrep :ensure t)
-(use-package change-inner :ensure t)       ; Similar to ci or co in Vim
-(use-package benchmark-init
+(use-package deadgrep :ensure t :defer t)
+(use-package change-inner :ensure t :defer t)       ; Similar to ci or co in Vim
+(use-package dumb-jump
   :ensure t
+  :defer t
   :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  (setq dumb-jump-force-searcher 'ag
+	dumb-jump-prefer-tooltip nil
+	dumb-jump-debug nil)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 ;; Global hooks
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -42,8 +41,12 @@
 (load-file "~/.emacs.d/custom_keybindings.el")
 
 ;; ====== Programming mode setup ======
-(add-to-list 'auto-mode-alist '("\\.exs?\\'" . (lambda () (load "~/.emacs.d/elixir_setup.el") (elixir-ts-mode))))
-(add-to-list 'auto-mode-alist '("\\.mli?\\|\\.mll\\|\\.mly\\'" . (lambda () (load "~/.emacs.d/ocaml_setup.el") (tuareg-mode))))
+;; (require 'elixir_setup) -> ~/.emacs.d/programming_setup/elixir_setup.el
+;; ensure each setup is only loaded once, but only for a file with the relevant file extension
+(add-to-list 'load-path "~/.emacs.d/programming_setup")
+;; (require 'elixir_setup)
+(add-to-list 'auto-mode-alist '("\\.exs?\\'" . (lambda () (require 'elixir_setup))))
+(add-to-list 'auto-mode-alist '("\\.mli?\\|\\.mll\\|\\.mly\\'" . (lambda () (require 'ocaml_setup))))
 ;; ====== End programming mode setup ======
 
 (custom-set-variables
@@ -55,7 +58,7 @@
    '("6843739510a2707c5b2822427bf11d46e952f09d8df8589ff577f5e3c4efd31a"
      "3aa51468052c1e3e21dd41a3fa40c0161e07ca600683e3d96f1bca70f36749e2"
      "8899e88d19a37d39c7187f4bcb5bb596fba990728ef963420b93e2aea5d1666a" default))
- '(package-selected-packages nil))
+ '(package-selected-packages '(change-inner deadgrep dumb-jump exunit simplicity-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

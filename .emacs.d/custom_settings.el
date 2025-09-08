@@ -8,7 +8,7 @@
   )
 
 ;; keep windows balanced all the time
-(setf window-combination-resize t)
+(setq window-combination-resize t)
 
 (defun split-and-follow-horizontally ()
   (interactive)
@@ -23,6 +23,14 @@
   (balance-windows)
   (other-window 1))
 (global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
+
+(defun my/project-files-functions (project)
+  "Returns list of files in PROJECT using git. Useful to speed up project.el by only considering version-controlled files"
+  (let ((default-directory (project-root project)))
+    (when (file-directory-p (expand-file-name ".git" default-directory))
+      (process-lines "git" "ls-files" "--cached" "--others" "--exclude-standard"))))
+
+(setq project-files-functions '(my/project-files-functions))
 
 ;; set default browser as default OS X browser
 (setq browse-url-browser-function 'browse-url-default-macosx-browser)
@@ -43,4 +51,35 @@
 (setq search-whitespace-regexp ".*?")   ; fuzzy-search with isearch
 (setq xref-search-program 'ripgrep)
 (setq compilation-scroll-output t)
+(completion-preview-mode t)
 ;; (setq compilation-scroll-output 'first-error)
+
+;; abbrevations and completion
+(setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-styles '(basic initials partial-completion substring)
+      completion-category-defaults nil
+      completion-show-help nil
+      tab-always-indent 'complete)
+
+;; org-mode settings
+(setq org-directory "~/.org")
+(setq org-agenda-files '("~/.org/tasks.org" "~/.org/agenda.org" "~/.org/thinking.org"))
+(setq org-agenda-todo-list-sublevels t)
+(setq org-refile-keep t)
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+(setq org-refile-targets
+      '(("~/.org/tasks.org" :maxlevel . 2)
+	("~/.org/agenda.org" :maxlevel . 2)
+	("~/.org/thinking.org" :maxlevel . 2)))
+(setq org-capture-templates
+      '(("l" "Quick Thinking" entry
+	 (file+headline "~/.org/thinking.org" "Quick Logs")
+	 "* Quick Thinking - %U\n** What's the goal?\n%?\n** What's blocking me?\n\n** What's safe to try next?\n- [ ] "
+	 :empty-lines 1)))
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "IN_PROGRESS(i)" "|" "DONE(d)" "CANCELED(c)")))
+
+(advice-add 'org-refile :after
+	    (lambda (&rest _)
+	      (save-some-buffers t (lambda () (member (buffer-file-name) org-agenda-files))))) ;; auto-save refile
